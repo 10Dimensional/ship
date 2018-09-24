@@ -1,0 +1,18 @@
+##---
+# Source: bitcoind/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bitcoind
+  labels:
+    app: bitcoind
+    chart: bitcoind-0.1.3
+    release: bitcoind
+    heritage: Tiller
+data:
+  bitcoin.conf: |-
+    server=1
+    printtoconsole=1
+    rpcuser=rpcuser
+    rpcpassword=rpcpassword
+  

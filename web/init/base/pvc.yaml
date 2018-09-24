@@ -1,0 +1,20 @@
+##---
+# Source: bitcoind/templates/pvc.yaml
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: bitcoind
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: bitcoind
+    chart: "bitcoind-0.1.3"
+    release: "bitcoind"
+    heritage: "Tiller"
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "300Gi"

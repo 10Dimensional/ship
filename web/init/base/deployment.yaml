@@ -1,0 +1,62 @@
+##---
+# Source: bitcoind/templates/deployment.yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: bitcoind
+  labels:
+    app: bitcoind
+    chart: bitcoind-0.1.3
+    release: bitcoind
+    heritage: Tiller
+spec:
+  selector:
+    matchLabels:
+      app: bitcoind
+      release: bitcoind
+  template:
+    metadata:
+      labels:
+        app: bitcoind
+        release: bitcoind
+    spec:
+      initContainers:
+        - name: copy-bitcoind-config
+          image: busybox
+          command: ['sh', '-c', 'cp /configmap/bitcoin.conf /bitcoin/.bitcoin/bitcoin.conf']
+          volumeMounts:
+            - name: configmap
+              mountPath: /configmap
+            - name: config
+              mountPath: /bitcoin/.bitcoin/
+      containers:
+        - name: bitcoind
+          image: "arilot/docker-bitcoind:0.15.1"
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            {}
+          
+          ports:
+            - name: rpc
+              containerPort: 8332
+            - name: p2p
+              containerPort: 8333
+            - name: testnet
+              containerPort: 18332
+            - name: testnetp2pport
+              containerPort: 18333
+          volumeMounts:
+            - name: data
+              mountPath: /bitcoin
+            - name: config
+              mountPath: /bitcoin/.bitcoin/bitcoin.conf
+              subPath: bitcoin.conf
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: configmap
+          configMap:
+            name: bitcoind
+        - name: data
+          persistentVolumeClaim:
+            claimName: bitcoind

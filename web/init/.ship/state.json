@@ -1,0 +1,19 @@
+{
+  "v1": {
+    "config": null,
+    "helmValues": "# Default values for bitcoind.\n# This is a YAML-formatted file.\n# Declare variables to be passed into your templates.\n\nimage:\n  repository: arilot/docker-bitcoind\n  tag: 0.15.1\n  pullPolicy: IfNotPresent\n\nservice:\n  rpcPort: 8332\n  p2pPort: 8333\n  testnetPort: 18332\n  testnetP2pPort: 18333\n\npersistence:\n  enabled: true\n  ## database data Persistent Volume Storage Class\n  ## If defined, storageClassName: \u003cstorageClass\u003e\n  ## If set to \"-\", storageClassName: \"\", which disables dynamic provisioning\n  ## If undefined (the default) or set to null, no storageClassName spec is\n  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on\n  ##   GKE, AWS \u0026 OpenStack)\n  ##\n  # storageClass: \"-\"\n  accessMode: ReadWriteOnce\n  size: 300Gi\n\n## Configure resource requests and limits\n## ref: http://kubernetes.io/docs/user-guide/compute-resources/\n##\nresources: {}\n#  requests:\n#    memory: 512Mi\n#    cpu: 300m\n\n# Custom bitcoind configuration file used to override default bitcoind settings\nconfigurationFile:\n  bitcoin.conf: |-\n    server=1\n    printtoconsole=1\n    rpcuser=rpcuser\n    rpcpassword=rpcpassword\n",
+    "helmValuesDefaults": "# Default values for bitcoind.\n# This is a YAML-formatted file.\n# Declare variables to be passed into your templates.\n\nimage:\n  repository: arilot/docker-bitcoind\n  tag: 0.15.1\n  pullPolicy: IfNotPresent\n\nservice:\n  rpcPort: 8332\n  p2pPort: 8333\n  testnetPort: 18332\n  testnetP2pPort: 18333\n\npersistence:\n  enabled: true\n  ## database data Persistent Volume Storage Class\n  ## If defined, storageClassName: \u003cstorageClass\u003e\n  ## If set to \"-\", storageClassName: \"\", which disables dynamic provisioning\n  ## If undefined (the default) or set to null, no storageClassName spec is\n  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on\n  ##   GKE, AWS \u0026 OpenStack)\n  ##\n  # storageClass: \"-\"\n  accessMode: ReadWriteOnce\n  size: 300Gi\n\n## Configure resource requests and limits\n## ref: http://kubernetes.io/docs/user-guide/compute-resources/\n##\nresources: {}\n#  requests:\n#    memory: 512Mi\n#    cpu: 300m\n\n# Custom bitcoind configuration file used to override default bitcoind settings\nconfigurationFile:\n  bitcoin.conf: |-\n    server=1\n    printtoconsole=1\n    rpcuser=rpcuser\n    rpcpassword=rpcpassword\n",
+    "upstream": "https://github.com/helm/charts/tree/master/stable/bitcoind",
+    "contentSHA": "91e24ea484372913de9b531db388be7e858f629fe5b31fbce01deee02fce3b20",
+    "lifecycle": {
+      "stepsCompleted": {
+        "intro": true,
+        "kustomize": true,
+        "kustomize-intro": true,
+        "outro": true,
+        "render": true,
+        "values": true
+      }
+    }
+  }
+}
