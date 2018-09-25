@@ -9,6 +9,11 @@ import StepNumbers from "./StepNumbers";
 import DetermineComponentForRoute from "../../containers/DetermineComponentForRoute";
 import StepDone from "./StepDone";
 
+const isRootPath = (basePath) => {
+  const formattedBasePath = basePath === "" ? "/" : basePath.replace(/\/$/, "");
+  return window.location.pathname === formattedBasePath
+}
+
 const ShipRoutesWrapper = ({ routes, headerEnabled, basePath }) => (
   <div className="flex-column flex1">
     <div className="flex-column flex1 u-overflow--hidden u-position--relative">
@@ -46,7 +51,6 @@ const ShipRoutesWrapper = ({ routes, headerEnabled, basePath }) => (
 
 export default class RouteDecider extends React.Component {
   static propTypes = {
-    routerEnabled: PropTypes.bool,
     isDone: PropTypes.bool.isRequired,
     routes: PropTypes.arrayOf(
       PropTypes.shape({
@@ -61,6 +65,7 @@ export default class RouteDecider extends React.Component {
     const {
       routes,
       getHelmChartMetadata,
+      basePath
     } = this.props
     if (routes !== lastProps.routes && routes.length) {
       for (let i = 0; i < routes.length; i++) {
@@ -68,6 +73,9 @@ export default class RouteDecider extends React.Component {
           getHelmChartMetadata();
           break;
         }
+      }
+      if (isRootPath(basePath)) {
+        window.location.replace(`${basePath}/${routes[0].id}`);
       }
     }
   }
@@ -82,10 +90,9 @@ export default class RouteDecider extends React.Component {
     const {
       routes,
       isDone,
-      routerEnabled,
       basePath,
       history,
-      headerEnabled
+      headerEnabled,
     } = this.props;
     const routeProps = {
       routes,
@@ -94,13 +101,13 @@ export default class RouteDecider extends React.Component {
     }
     return (
       <div className="u-minHeight--full u-minWidth--full flex-column flex1">
-        { !routerEnabled ? 
+        { history ? 
           <Router history={history}>
             <ShipRoutesWrapper 
               {...routeProps}
             />
           </Router> :
-          <BrowserRouter basename="/">
+          <BrowserRouter basename={basePath}>
             <ShipRoutesWrapper 
               {...routeProps}
             />

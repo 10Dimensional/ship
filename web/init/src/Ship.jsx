@@ -9,12 +9,6 @@ import "./scss/index.scss";
 const bodyClass = "ship-init";
 
 export class Ship extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      store: null
-    }
-  }
   static propTypes = {
     /** API endpoint for the Ship binary */
     apiEndpoint: PropTypes.string.isRequired,
@@ -25,37 +19,22 @@ export class Ship extends React.Component {
     /**
      * Determines whether or not the Ship Init app will instantiate its own BrowserRouter
      * */
-    routerEnabled: PropTypes.bool,
-    /**
-     * Determines whether or not the header will be shown
-     * */
     headerEnabled: PropTypes.bool,
     /**
-     * Parent history needed to handle internal routing, in the case of routerEnabled = false
+     * Parent history needed to sync ship routing with parent
      * */
     history: PropTypes.object
   }
 
-  componentDidMount() {
-    const { apiEndpoint } = this.props;
-    // This fixes a bug regarding explicit hot reloading of reducers introduced in Redux v2.0.0
-    const store = configureStore(apiEndpoint);
-    this.setState({ store });
-  }
-
   render() {
-    const { history = null, headerEnabled = true, basePath = "", routerEnabled = true } = this.props;
-    const { store } = this.state;
-
-    if(!store) return <div></div>;
+    const { apiEndpoint, history = null, headerEnabled = false, basePath = "" } = this.props;
 
     return (
       <div id="ship-init-component">
-        <Provider store={store}>
+        <Provider store={configureStore(apiEndpoint)}>
           <AppWrapper>
             <RouteDecider 
               headerEnabled={headerEnabled}
-              routerEnabled={routerEnabled} 
               basePath={basePath}
               history={history}
             />
